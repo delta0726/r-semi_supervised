@@ -36,22 +36,24 @@ data(wine)
 
 # 1 データ作成 --------------------------------------------------------------------------
 
+# データ分割
+set.seed(1)
+train.index <- wine$Wine %>% createDataPartition(p = .7, list = FALSE)
+train <- wine[ train.index,]
+test  <- wine[-train.index,]
+
+# 行列数
+train %>% dim()
+test %>% dim()
+
+# データ確認
+train %>% glimpse()
+
 # 列番号の取得
+# --- Wineは14列目
 cls <- which(colnames(wine) == "Wine")
 
-# 変数定義
-x <- wine[, -cls] %>% scale()
-y <- wine[, cls]
 
-# データ分割
-set.seed(20)
-tra.idx <- sample(x = length(y), size = ceiling(length(y) * 0.5))
-xtrain <- x[tra.idx,]
-ytrain <- y[tra.idx]
-
-# ラベルをNAに置換
-tra.na.idx <- sample(x = length(tra.idx), size = ceiling(length(tra.idx) * 0.7))
-ytrain[tra.na.idx] <- NA
 
 
 # Use the other 50% of instances for inductive testing
@@ -62,6 +64,7 @@ yitest <- y[tst.idx] # classes of testing instances
 ## Example: Training from a set of instances with 1-NN (knn3) as base classifier.
 gen.learner1 <- function(indexes, cls)
   caret::knn3(x = xtrain[indexes,], y = cls, k = 1)
+
 gen.pred1 <- function(model, indexes)
   predict(model, xtrain[indexes,])
 
