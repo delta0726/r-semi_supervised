@@ -86,7 +86,7 @@ m %>%
 # デモクラティックモデル
 # --- 共学習
 set.seed(1)
-m <- democratic(learners = list(rf,bt),
+m <- democratic(learners = list(rf, bt),
                 schemes = list(c("Malic.Acid","Ash"), c("Magnesium","Proline")) ) %>%
   fit(Wine ~ ., data = train)
 
